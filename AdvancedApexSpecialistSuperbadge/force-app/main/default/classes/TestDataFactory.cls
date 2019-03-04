@@ -12,10 +12,10 @@ public with sharing class TestDataFactory {
         //ToDo: Ensure this method returns a single Chatter CollaborationGroup
         //    whose Name starts with 'TEST' followed by the INVENTORY_ANNOUNCEMENTS constant
         //    and configured so anyone can join, see and post updates.
-        CollaborationGroup group = new CollaborationGroup();
-        group.Name = 'TEST' + Constants.INVENTORY_ANNOUNCEMENTS;
-        group.CollaborationType = 'Public';
-        return group;
+        CollaborationGroup colgroup = new CollaborationGroup();
+        colgroup.Name = 'TEST' + Constants.INVENTORY_ANNOUNCEMENTS;
+        colgroup.CollaborationType = 'Public';
+        return colgroup;
     }
 
     /**
@@ -52,7 +52,7 @@ public with sharing class TestDataFactory {
      * @name CreatePricebookEntries
      * @description Constructs a list of PricebookEntry records for unit tests
     **/
-    public static void ConstructPricebookEntries(List<Product2> prods){
+    public static List<PriceBookEntry> ConstructPricebookEntries(List<Product2> prods){
         //ToDo: Ensure this method returns a corresponding list of PricebookEntries records
         //  related to the provided Products
         //  with all the required fields populated
@@ -119,7 +119,7 @@ public with sharing class TestDataFactory {
         //  with all of the required fields populated.
         List<Order> orderList = new List<Order>();
         for(Integer i = 0; i < cnt; i++){
-            orderList.add(new Order(EffectiveDate = today, AccountId = accts[i].Id, Status = 'Draft', Pricebook2Id = Constants.STANDARD_PRICEBOOK_ID));
+            orderList.add(new Order(EffectiveDate = System.Today(), AccountId = accts[i].Id, Status = 'Draft', Pricebook2Id = Constants.STANDARD_PRICEBOOK_ID));
         }
         return orderList;
     }
@@ -128,13 +128,17 @@ public with sharing class TestDataFactory {
      * @name CreateOrderItems
      * @description Constructs a list of OrderItem records for unit tests
     **/
-    public static void ConstructOrderItems(integer cnt, list<pricebookentry> pbes, list<order> ords){
+    public static List<OrderItem> ConstructOrderItems(integer cnt, list<pricebookentry> pbes, list<order> ords){
         //ToDo: Ensure this method returns a list of size cnt of OrderItem records
         //  related to the provided Pricebook Entries
         //  and related to the provided Orders
         //  with all of the required fields populated.
         //  Hint: Use the DEFAULT_ROWS constant for Quantity as it will be used in the next challenge
-        
+        List<OrderItem> orderItemList = new List<OrderItem>();
+        for(Integer i=0; i < cnt; i++){
+            orderItemList.add(new OrderItem(OrderId = ords[i].id, PriceBookEntryId =pbes[i].id, UnitPrice = pbes[i].UnitPrice, Quantity = Constants.DEFAULT_ROWS));
+        }
+        return orderItemList;
     }
 
     /**
@@ -144,7 +148,27 @@ public with sharing class TestDataFactory {
     public static void InsertTestData(Integer cnt){
         //ToDo: Ensure this method calls each of the construct methods
         //  and inserts the results for use as test data.
-
+        CollaborationGroup colG=ConstructCollaborationGroup();
+        insert colG;
+        
+        List<Account> a=ConstructAccounts(cnt);
+        insert a;
+        
+        List<Contact> c=ConstructContacts(cnt, a);
+        insert c;
+        
+        List<Product2> p= ConstructProducts(cnt);
+        insert p;
+        
+        List<PriceBookEntry> pbe = ConstructPricebookEntries(p);
+        insert pbe;
+       
+        List<Order> o=ConstructOrders(cnt, a);
+        insert o;
+       
+       
+        List<OrderItem> oi=ConstructOrderItems(cnt, pbe, o);
+        insert oi;
     }
 
 }
