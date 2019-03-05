@@ -1,4 +1,8 @@
 public without sharing class ChartHelper {
+<<<<<<< HEAD
+=======
+    //Without sharing makes it run as system??
+>>>>>>> Step-3
     @AuraEnabled
     public static List<chartData> GetInventory(){
         List<chartData> cht = new List<chartData>();
