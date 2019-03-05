@@ -140,7 +140,10 @@ public with sharing class TestDataFactory {
         }
         return orderItemList;
     }
-
+    public static void VerifyQuantityOrdered(Product2 originalProduct, Product2 updatedProduct, Integer qtyOrdered){
+        Integer sum = Integer.valueOf(originalProduct.Quantity_Ordered__c) + qtyOrdered;
+        System.assertEquals(updatedProduct.Quantity_Ordered__c, sum);
+    }
     /**
      * @name SetupTestData
      * @description Inserts accounts, contacts, Products, PricebookEntries, Orders, and OrderItems.
