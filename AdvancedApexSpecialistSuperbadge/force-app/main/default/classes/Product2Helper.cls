@@ -7,13 +7,8 @@ public class Product2Helper {
     static List<CollaborationGroup> COLLABORATION_GROUP = [
         SELECT Id
         FROM CollaborationGroup
-<<<<<<< HEAD
-        WHERE Name = 'group name'
-        OR Name = :('TEST'+'group name')
-=======
         WHERE Name = :Constants.INVENTORY_ANNOUNCEMENTS
         OR Name = :('TEST'+ Constants.INVENTORY_ANNOUNCEMENTS)
->>>>>>> Step-3
         LIMIT 1
     ];
 
@@ -23,15 +18,6 @@ public class Product2Helper {
      * @param List<Product2> newList
      * @param List<Product2> oldList
     **/
-<<<<<<< HEAD
-    public static void AfterUpdate(){
-        //ToDo: Declare a List of Product2 records named needsAnnouncement
-
-        //ToDo: Declare a Map of Strings to Inventory_Setting__mdt records
-
-        //ToDo: Loop through a query of Inventory_Setting__mdt records and populate the Map with Name as the key
-
-=======
     public static void AfterUpdate(List<Product2> newList){
         //ToDo: Declare a List of Product2 records named needsAnnouncement
         List<Product2> needsAnnouncement = new List<Product2>();
@@ -43,15 +29,10 @@ public class Product2Helper {
         for(Inventory_Setting__mdt e : invSettingRecords) {
             invset.put(e.DeveloperName, e.Low_Quantity_Alert__c);
         }
->>>>>>> Step-3
         //ToDo: Loop through the Products in newList
         // Use the corresponding Inventory Setting record to determine the correct Low Quantity Alert
         // If the Product's Quantity Remaining has been changed to less than the Low Quantity Alert
         //      add it to the needsAnnouncement list
-<<<<<<< HEAD
-
-        //ToDo: Pass records to the postAlerts method
-=======
         for(Product2 p : newList){
             if(invset.containsKey(p.Family) && p.Quantity_Remaining__c < invset.get(p.Family)) {
                 needsAnnouncement.add(p);
@@ -60,7 +41,6 @@ public class Product2Helper {
 
         //ToDo: Pass records to the postAlerts method
         PostAlerts(needsAnnouncement);
->>>>>>> Step-3
     }
 
     /**
@@ -75,10 +55,6 @@ public class Product2Helper {
             // expires in a day
             // does not notify users via email.
             // and has a text body that includes the name of the product followed by the INVENTORY_LEVEL_LOW constant
-<<<<<<< HEAD
-        }
-        // ToDo: Create and enqueue an instance of the announcementQueuable class with the list of Products
-=======
             ConnectApi.MessageBodyInput body = new ConnectApi.MessageBodyInput();
             ConnectApi.TextSegmentInput inputText = new ConnectApi.TextSegmentInput();
 
@@ -98,6 +74,5 @@ public class Product2Helper {
             AnnouncementQueueable n = new AnnouncementQueueable();
             n.toPost = toPost;
             System.enqueueJob(n);
->>>>>>> Step-3
     }
 }
